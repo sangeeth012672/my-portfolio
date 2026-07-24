@@ -14,7 +14,7 @@ class _ParticleBackgroundState extends State<ParticleBackground>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late List<Particle> _particles;
-  final int _particleCount = 60;
+  final int _particleCount = 50;
 
   @override
   void initState() {
@@ -36,17 +36,18 @@ class _ParticleBackgroundState extends State<ParticleBackground>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, _) {
-            for (final p in _particles) {
-              p.update();
-            }
-            return CustomPaint(
-              painter: _ParticlePainter(_particles),
-              child: const SizedBox.expand(),
-            );
-          },
+        Positioned.fill(
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (context, _) {
+              for (final p in _particles) {
+                p.update();
+              }
+              return CustomPaint(
+                painter: _ParticlePainter(_particles),
+              );
+            },
+          ),
         ),
         widget.child,
       ],

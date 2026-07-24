@@ -1,166 +1,356 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/models/experience_model.dart';
-import 'package:flutter_app/models/project_model.dart';
-import 'package:flutter_app/models/skill_model.dart';
+import '../models/education_model.dart';
+import '../models/experience_model.dart';
+import '../models/project_model.dart';
+import '../models/skill_model.dart';
 
 class AppConstants {
   AppConstants._();
 
   // === Personal Info ===
-  static const String name = 'Alex Carter';
+  static const String name = 'Sangeeth K Sambasivan';
   static const String role = 'Flutter Developer';
   static const String tagline =
-      'Crafting beautiful, performant mobile experiences\nthat users love to interact with.';
+      'Crafting high-performance cross-platform mobile apps with Flutter, Dart & Django Backends.';
   static const String bio =
-      'I\'m a passionate Flutter Developer with 4+ years of experience building '
-      'cross-platform mobile applications that deliver exceptional user experiences. '
-      'I specialize in creating pixel-perfect UIs, integrating complex animations, '
-      'and architecting scalable apps using modern patterns like BLoC, Riverpod, and Clean Architecture. '
-      'Every line of code I write is for performance, maintainability, and user delight.';
+      'I am a dedicated Flutter Developer based in Thrissur, Kerala, with extensive experience '
+      'designing and building cross-platform mobile applications using Flutter and Dart. '
+      'My technical expertise encompasses REST API integration with Python Django backends, Firebase services, '
+      'and Provider & BLoC state management architectures. I thrive in creating responsive mobile interfaces, '
+      'optimizing app performance, and delivering clean, maintainable code within agile development workflows.';
 
-  static const String email = 'alex.carter@flutter.dev';
-  static const String phone = '+1 (555) 234-5678';
-  static const String location = 'San Francisco, CA';
+  static const String email = 'sangeethks742@gmail.com';
+  static const String phone1 = '+91 95672 59782';
+  static const String phone2 = '+91 97780 04059';
+  static const String whatsappUrl = 'https://wa.me/919567259782';
+  static const String location = 'Thrissur, Kerala, India';
   static const String githubUrl = 'https://github.com/';
   static const String linkedinUrl = 'https://linkedin.com/';
-  static const String twitterUrl = 'https://twitter.com/';
-  static const String resumeUrl = 'https://drive.google.com/';
+  static const String resumeUrl = '#'; // Download trigger
 
   // === Stats ===
-  static const int yearsExperience = 4;
-  static const int projectsCompleted = 35;
-  static const int happyClients = 28;
-  static const int githubStars = 500;
+  static const int yearsExperience = 2;
+  static const int projectsCompleted = 10;
+  static const int mobileAppsBuilt = 8;
+  static const int webProjectsBuilt = 2;
 
   // === Typing Roles ===
   static const List<String> typingRoles = [
     'Flutter Developer',
-    'Mobile Architect',
-    'UI / UX Enthusiast',
-    'Open Source Contributor',
-    'Dart Craftsman',
+    'Mobile Application Engineer',
+    'Provider & BLoC Architect',
+    'Django REST API Integrator',
+    'Cross-Platform Craftsman',
+  ];
+
+  // === Skill Categories ===
+  static const List<String> skillCategories = [
+    'All',
+    'Frameworks',
+    'State Mgmt',
+    'APIs & Cloud',
+    'Databases',
+    'Tools & Languages',
   ];
 
   // === Skills ===
   static final List<SkillModel> skills = [
-    SkillModel(name: 'Flutter', level: 0.95, category: 'Mobile'),
-    SkillModel(name: 'Dart', level: 0.93, category: 'Language'),
-    SkillModel(name: 'Firebase', level: 0.88, category: 'Backend'),
-    SkillModel(name: 'BLoC / Cubit', level: 0.90, category: 'State Mgmt'),
-    SkillModel(name: 'Riverpod', level: 0.85, category: 'State Mgmt'),
-    SkillModel(name: 'REST APIs', level: 0.92, category: 'Integration'),
-    SkillModel(name: 'GetX', level: 0.87, category: 'State Mgmt'),
-    SkillModel(name: 'Git & CI/CD', level: 0.84, category: 'DevOps'),
-    SkillModel(name: 'UI Animation', level: 0.91, category: 'Design'),
-    SkillModel(name: 'SQLite', level: 0.80, category: 'Database'),
-    SkillModel(name: 'Figma', level: 0.78, category: 'Design'),
-    SkillModel(name: 'GraphQL', level: 0.75, category: 'Integration'),
+    const SkillModel(name: 'Flutter', level: 0.95, category: 'Frameworks'),
+    const SkillModel(name: 'Dart', level: 0.92, category: 'Tools & Languages'),
+    const SkillModel(name: 'Provider', level: 0.90, category: 'State Mgmt'),
+    const SkillModel(name: 'BLoC', level: 0.88, category: 'State Mgmt'),
+    const SkillModel(name: 'REST APIs', level: 0.92, category: 'APIs & Cloud'),
+    const SkillModel(name: 'Python Django API', level: 0.85, category: 'APIs & Cloud'),
+    const SkillModel(name: 'Firebase', level: 0.88, category: 'APIs & Cloud'),
+    const SkillModel(name: 'Dio & HTTP', level: 0.90, category: 'APIs & Cloud'),
+    const SkillModel(name: 'SQLite', level: 0.86, category: 'Databases'),
+    const SkillModel(name: 'Hive', level: 0.84, category: 'Databases'),
+    const SkillModel(name: 'Java / Android', level: 0.80, category: 'Frameworks'),
+    const SkillModel(name: 'MySQL', level: 0.78, category: 'Databases'),
+    const SkillModel(name: 'SQL Server', level: 0.75, category: 'Databases'),
+    const SkillModel(name: 'Git & GitHub', level: 0.90, category: 'Tools & Languages'),
+    const SkillModel(name: 'Android Studio', level: 0.92, category: 'Tools & Languages'),
+    const SkillModel(name: 'VS Code', level: 0.94, category: 'Tools & Languages'),
   ];
 
-  // === Projects ===
+  // === Project Categories ===
+  static const List<String> projectCategories = [
+    'All',
+    'Featured',
+    'Mobile Apps',
+    'Healthcare',
+    'Web & Security',
+    'AI & Utilities',
+  ];
+
+  // === Projects (10 Real CV Projects) ===
   static final List<ProjectModel> projects = [
-    ProjectModel(
-      title: 'FinFlow — Banking App',
+    const ProjectModel(
+      title: 'Expense Manager App',
+      subtitle: 'Offline-First Financial Tracking & Budget Sync',
       description:
-          'A modern banking app with real-time transaction tracking, biometric auth, '
-          'expense analytics with custom charts, and seamless card management.',
-      techStack: ['Flutter', 'Firebase', 'BLoC', 'Plaid API', 'Hive'],
-      gradient: const [Color(0xFF00E5FF), Color(0xFF0072FF)],
+          'An offline-first expense management mobile app engineered with BLoC pattern for predictable state flow and SQLite for local data persistence, featuring budget analytics and optional REST API cloud sync.',
+      features: [
+        'Offline-first architecture powered by SQLite local database',
+        'BLoC state management pattern for reactive UI updates',
+        'Interactive spending analytics & category breakdown charts',
+        'Optional REST API sync for cloud backup',
+        'Custom budget goals and alert notifications',
+      ],
+      techStack: ['Flutter', 'BLoC', 'SQLite', 'REST API', 'Dart'],
+      category: 'Mobile Apps',
+      gradient: [Color(0xFF00E5FF), Color(0xFF0072FF)],
+      icon: Icons.account_balance_wallet_rounded,
       githubUrl: 'https://github.com/',
       liveUrl: '',
       featured: true,
     ),
-    ProjectModel(
-      title: 'MediCare — Health Tracker',
+    const ProjectModel(
+      title: 'Learning Management System (LMS)',
+      subtitle: 'Course Management & E-Learning Portal',
       description:
-          'Health monitoring app with AI-powered symptom checker, appointment booking, '
-          'prescription reminders, and wearable device integration via Bluetooth.',
-      techStack: ['Flutter', 'Riverpod', 'Node.js', 'MongoDB', 'BLE'],
-      gradient: const [Color(0xFF00FF88), Color(0xFF00C4FF)],
+          'A feature-rich learning management mobile app built with Flutter and REST API integration to Django backends, offering interactive course modules, lesson progress tracking, and student assessments.',
+      features: [
+        'Course catalog with video streaming integration',
+        'REST API integration with Python Django backend',
+        'Real-time student progress tracking & module completion',
+        'Interactive quizzes with instant score evaluation',
+        'Offline material download and bookmarking',
+      ],
+      techStack: ['Flutter', 'Provider', 'REST API', 'Django', 'Dio'],
+      category: 'Mobile Apps',
+      gradient: [Color(0xFFBB86FC), Color(0xFFFF4081)],
+      icon: Icons.school_rounded,
       githubUrl: 'https://github.com/',
       liveUrl: '',
       featured: true,
     ),
-    ProjectModel(
-      title: 'EduMind — E-Learning',
+    const ProjectModel(
+      title: 'MyCISO Platform',
+      subtitle: 'Cybersecurity Governance & Compliance Management',
       description:
-          'Feature-rich e-learning platform with video streaming, offline downloads, '
-          'interactive quizzes, progress tracking, and live class sessions.',
-      techStack: ['Flutter', 'GetX', 'Django', 'PostgreSQL', 'WebRTC'],
-      gradient: const [Color(0xFFBB86FC), Color(0xFFFF4081)],
+          'Contributed to the web application development for cybersecurity governance, risk management, and compliance auditing, helping companies maintain regulatory security frameworks.',
+      features: [
+        'Cybersecurity risk assessment dashboard',
+        'Compliance framework matrix visualizer',
+        'Audit report generation and security scoring',
+        'Responsive layout for security officers & executives',
+        'Role-based access management UI',
+      ],
+      techStack: ['Flutter Web', 'REST API', 'Provider', 'Cybersecurity'],
+      category: 'Web & Security',
+      gradient: [Color(0xFF00FF88), Color(0xFF00E5FF)],
+      icon: Icons.shield_rounded,
       githubUrl: 'https://github.com/',
       liveUrl: '',
       featured: true,
     ),
-    ProjectModel(
-      title: 'ShopNest — E-Commerce',
+    const ProjectModel(
+      title: 'Highland Website',
+      subtitle: 'Responsive Cross-Device Web Portal',
       description:
-          'Full-featured e-commerce app with AR try-on, Stripe payments, '
-          'real-time inventory, push notifications, and advanced product filtering.',
-      techStack: ['Flutter', 'Firebase', 'Stripe', 'AR Core', 'BLoC'],
-      gradient: const [Color(0xFFFFB300), Color(0xFFFF4081)],
+          'Designed and developed pixel-perfect responsive user interfaces for desktop monitors, tablets, and mobile smartphones with high performance and smooth scroll aesthetics.',
+      features: [
+        'Multi-device responsive layout architecture',
+        'Custom animation transitions and typography scaling',
+        'Cross-browser rendering optimization',
+        'Fast asset loading & image compression',
+      ],
+      techStack: ['Flutter Web', 'Responsive Layouts', 'Dart', 'CSS FX'],
+      category: 'Web & Security',
+      gradient: [Color(0xFFFFB300), Color(0xFFFF4081)],
+      icon: Icons.web_rounded,
       githubUrl: 'https://github.com/',
       liveUrl: '',
       featured: false,
     ),
-    ProjectModel(
-      title: 'TravelGo — Trip Planner',
+    const ProjectModel(
+      title: 'Patient Mobile Application',
+      subtitle: 'Healthcare Patient Medical Data Management',
       description:
-          'Smart travel planner with AI itinerary generation, offline maps, '
-          'currency converter, hotel & flight booking, and social sharing.',
-      techStack: ['Flutter', 'Riverpod', 'Google Maps', 'OpenAI', 'Supabase'],
-      gradient: const [Color(0xFF29B6F6), Color(0xFF66BB6A)],
+          'Healthcare mobile app empowering patients to manage personal medical records, track health histories, book doctor appointments, and receive prescription reminders.',
+      features: [
+        'Secure patient profile & medical history log',
+        'Doctor appointment scheduling & reminder alerts',
+        'Real-time health record sync via REST APIs',
+        'Encrypted storage of sensitive health documents',
+      ],
+      techStack: ['Flutter', 'Provider', 'Firebase', 'REST API'],
+      category: 'Healthcare',
+      gradient: [Color(0xFF29B6F6), Color(0xFF00E5FF)],
+      icon: Icons.personal_injury_rounded,
+      githubUrl: 'https://github.com/',
+      liveUrl: '',
+      featured: true,
+    ),
+    const ProjectModel(
+      title: 'Doctor Mobile Application',
+      subtitle: 'Clinical Consultations & Digital Prescriptions',
+      description:
+          'A specialized mobile application for healthcare practitioners to manage patient consultations, issue digital prescriptions, and record clinical notes efficiently.',
+      features: [
+        'Daily consultation schedule overview',
+        'Digital prescription builder with PDF export',
+        'Clinical progress notes logging system',
+        'Django REST backend integration',
+      ],
+      techStack: ['Flutter', 'REST API', 'Django', 'Provider'],
+      category: 'Healthcare',
+      gradient: [Color(0xFFFF7043), Color(0xFFBB86FC)],
+      icon: Icons.medical_services_rounded,
       githubUrl: 'https://github.com/',
       liveUrl: '',
       featured: false,
     ),
-    ProjectModel(
-      title: 'ChatSphere — Messaging',
+    const ProjectModel(
+      title: 'Legal Advice Chatbot',
+      subtitle: 'Conversational Legal Guidance Assistant',
       description:
-          'End-to-end encrypted messaging app with voice/video calls, '
-          'story features, animated stickers, and multi-device sync.',
-      techStack: ['Flutter', 'Firebase', 'WebRTC', 'AES Encryption', 'GetX'],
-      gradient: const [Color(0xFFFF7043), Color(0xFFBB86FC)],
+          'Implemented an AI-assisted conversational mobile app providing automated legal guidance, topic consultation, and legal document template suggestions.',
+      features: [
+        'Conversational chat UI with instant smart suggestions',
+        'Legal query categorizer and reference library',
+        'Save & export consultation transcripts',
+        'Smooth stateful chat history stream',
+      ],
+      techStack: ['Flutter', 'REST API', 'Chat UI', 'BLoC'],
+      category: 'AI & Utilities',
+      gradient: [Color(0xFFBB86FC), Color(0xFF00E5FF)],
+      icon: Icons.gavel_rounded,
+      githubUrl: 'https://github.com/',
+      liveUrl: '',
+      featured: false,
+    ),
+    const ProjectModel(
+      title: 'Medicine Reminder App',
+      subtitle: 'Medication Tracking with Local Notifications',
+      description:
+          'A daily health utility application for medication tracking with custom reminder alarms, dosage logs, and refill notifications for patients and caregivers.',
+      features: [
+        'Customizable pill schedules (daily, weekly, custom cycles)',
+        'Local background notification triggers',
+        'Dosage history logging & adherence stats',
+        'Offline SQLite database storage',
+      ],
+      techStack: ['Flutter', 'Local Notifications', 'SQLite', 'Hive'],
+      category: 'Healthcare',
+      gradient: [Color(0xFF00FF88), Color(0xFF29B6F6)],
+      icon: Icons.alarm_rounded,
+      githubUrl: 'https://github.com/',
+      liveUrl: '',
+      featured: false,
+    ),
+    const ProjectModel(
+      title: 'Veterinary Management App',
+      subtitle: 'Clinic Records & Pet Appointment Scheduler',
+      description:
+          'Comprehensive veterinary clinic system managing pet medical histories, vaccination schedules, and owner appointment bookings.',
+      features: [
+        'Pet health profiles & vaccination tracking',
+        'Clinic appointment booking & calendar sync',
+        'Owner management & service billing summary',
+      ],
+      techStack: ['Flutter', 'Provider', 'Firebase', 'REST API'],
+      category: 'AI & Utilities',
+      gradient: [Color(0xFFFFB300), Color(0xFF66BB6A)],
+      icon: Icons.pets_rounded,
+      githubUrl: 'https://github.com/',
+      liveUrl: '',
+      featured: false,
+    ),
+    const ProjectModel(
+      title: 'Expiry Management App',
+      subtitle: 'Product Expiration Tracker & Alert System',
+      description:
+          'Inventory utility application that prevents stock waste by tracking product expiration dates and dispatching timely notification alerts.',
+      features: [
+        'Product barcode scanning & quick manual entry',
+        'Expiration countdown visualizer',
+        'Custom notification thresholds (e.g. 7 days prior)',
+        'Categorized product organization',
+      ],
+      techStack: ['Flutter', 'Barcode Scanner', 'SQLite', 'Notifications'],
+      category: 'AI & Utilities',
+      gradient: [Color(0xFFFF4081), Color(0xFFFF7043)],
+      icon: Icons.hourglass_bottom_rounded,
       githubUrl: 'https://github.com/',
       liveUrl: '',
       featured: false,
     ),
   ];
 
-  // === Experience ===
+  // === Experiences (from CV) ===
   static final List<ExperienceModel> experiences = [
-    ExperienceModel(
-      role: 'Senior Flutter Developer',
-      company: 'TechNova Inc.',
-      period: 'Jan 2023 – Present',
+    const ExperienceModel(
+      role: 'Flutter Developer',
+      company: 'Avanzo Cyber Security Solutions Pvt. Ltd.',
+      location: 'Thrissur, Kerala',
+      period: 'Nov 2024 – Present',
+      type: 'Full-time',
       description:
-          'Led a team of 5 developers building a cross-platform fintech app serving 200K+ users. '
-          'Designed micro-frontend architecture, reduced app startup time by 40%, '
-          'and integrated real-time analytics dashboards with custom chart animations.',
-      technologies: ['Flutter', 'BLoC', 'Firebase', 'Fastlane', 'GraphQL'],
+          'Developing high-performance cross-platform mobile applications, designing modular Flutter UI widgets, and connecting mobile clients with Django REST backends and Firebase services.',
+      bulletPoints: [
+        'Developing cross-platform mobile applications using Flutter and Dart.',
+        'Designing responsive user interfaces and reusable Flutter widgets for multiple screen sizes.',
+        'Integrating REST APIs built with Python Django and Firebase backend services.',
+        'Managing application state using Provider to improve performance and maintainability.',
+        'Collaborating with backend developers and managing source code using Git in an agile development environment.',
+      ],
+      technologies: ['Flutter', 'Dart', 'Provider', 'Django REST', 'Firebase', 'Git'],
       isPresent: true,
     ),
-    ExperienceModel(
+    const ExperienceModel(
       role: 'Flutter Developer',
-      company: 'PixelForge Studio',
-      period: 'Mar 2021 – Dec 2022',
+      company: 'Grapesgenix Technical Solutions Pvt. Ltd.',
+      location: 'Thrissur, Kerala',
+      period: 'Apr 2023 – Apr 2024',
+      type: '1 Year (Internship + Full-time)',
       description:
-          'Built 8 client apps for healthcare, e-learning, and retail verticals. '
-          'Pioneered animation-first development workflow, achieving 60fps smooth UIs across devices. '
-          'Mentored 3 junior developers and established code review culture.',
-      technologies: ['Flutter', 'Riverpod', 'REST APIs', 'Hive', 'Dio'],
+          'Completed a 3-month internship followed by a 9-month full-time Flutter developer role, shipping client apps and conducting testing and code reviews.',
+      bulletPoints: [
+        'Completed 3-month internship followed by a 9-month full-time role.',
+        'Developed Flutter mobile applications for client projects across various domains.',
+        'Performed debugging, testing, and code reviews to improve application stability.',
+        'Collaborated with the development team to deliver production applications to clients.',
+      ],
+      technologies: ['Flutter', 'Dart', 'REST API', 'Debugging', 'Git', 'Agile'],
       isPresent: false,
     ),
-    ExperienceModel(
-      role: 'Mobile Developer (Intern → Full-time)',
-      company: 'AppCraft Labs',
-      period: 'Jun 2020 – Feb 2021',
+    const ExperienceModel(
+      role: 'Android Development Trainee',
+      company: 'ATEES Industrial Training Pvt Ltd',
+      location: 'Thrissur, Kerala',
+      period: 'Nov 2021 – Apr 2022',
+      type: '6 Months Training',
       description:
-          'Started as intern, converted to full-time after shipping a fitness tracking app '
-          'that reached 50K downloads in 3 months. Gained deep expertise in Flutter animations '
-          'and platform channel integrations.',
-      technologies: ['Flutter', 'GetX', 'SQLite', 'ARCore', 'Notifications'],
+          'Underwent intensive industrial training in mobile development fundamentals, Java programming, Android SDK layout building, and app debugging.',
+      bulletPoints: [
+        'Learned fundamentals of Android mobile development using Java.',
+        'Built practice Android applications and performed debugging tasks.',
+        'Applied mobile UI guidelines and object-oriented programming concepts.',
+      ],
+      technologies: ['Java', 'Android SDK', 'Android Studio', 'OOP', 'Debugging'],
       isPresent: false,
     ),
+  ];
+
+  // === Education (from CV) ===
+  static final List<EducationModel> education = [
+    const EducationModel(
+      degree: 'BCA (Bachelor of Computer Applications)',
+      institution: 'Chinmaya Mission College, Thrissur',
+      university: 'Bharathiar University',
+      period: 'Jul 2015 – Aug 2018',
+      location: 'Thrissur, Kerala',
+      description:
+          'Comprehensive degree program focusing on Computer Science, Application Development, Software Engineering, Database Systems, and Object-Oriented Architecture.',
+    ),
+  ];
+
+  // === Languages ===
+  static const List<Map<String, String>> languages = [
+    {'name': 'English', 'level': 'Fluent'},
+    {'name': 'Malayalam', 'level': 'Native'},
+    {'name': 'Tamil', 'level': 'Intermediate'},
   ];
 }

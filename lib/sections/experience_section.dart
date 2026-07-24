@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/app_colors.dart';
 import '../core/app_constants.dart';
+import '../models/education_model.dart';
 import '../models/experience_model.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/section_title.dart';
 
-class ExperienceSection extends StatelessWidget {
+class ExperienceSection extends StatefulWidget {
   const ExperienceSection({super.key});
+
+  @override
+  State<ExperienceSection> createState() => _ExperienceSectionState();
+}
+
+class _ExperienceSectionState extends State<ExperienceSection> {
+  int _activeTab = 0; // 0 = Experience, 1 = Education & Languages
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +23,9 @@ class ExperienceSection extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: w > 900 ? 80 : 24, vertical: 100),
+        horizontal: w > 900 ? 80 : 24,
+        vertical: 100,
+      ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [AppColors.bgDark, AppColors.bgSurface.withOpacity(0.3)],
@@ -26,37 +36,129 @@ class ExperienceSection extends StatelessWidget {
       child: Column(
         children: [
           const SectionTitle(
-            title: 'Experience',
+            title: 'Experience & Education',
             subtitle:
-                'My professional journey — the roles, companies, and milestones that shaped me.',
+                'My career journey in Flutter & Android development, industrial training, and academic background.',
           ),
-          ...List.generate(AppConstants.experiences.length, (i) {
-            final exp = AppConstants.experiences[i];
-            final isLast = i == AppConstants.experiences.length - 1;
-            return _TimelineEntry(
-                experience: exp, index: i, isLast: isLast);
-          }),
+          // Tab Switcher
+          Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppColors.bgCard,
+              border: Border.all(color: AppColors.borderGlass),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _TabButton(
+                  label: 'Work Experience',
+                  icon: Icons.work_rounded,
+                  isActive: _activeTab == 0,
+                  onTap: () => setState(() => _activeTab = 0),
+                ),
+                _TabButton(
+                  label: 'Education & Languages',
+                  icon: Icons.school_rounded,
+                  isActive: _activeTab == 1,
+                  onTap: () => setState(() => _activeTab = 1),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 48),
+          if (_activeTab == 0) ...[
+            ...List.generate(AppConstants.experiences.length, (i) {
+              final exp = AppConstants.experiences[i];
+              final isLast = i == AppConstants.experiences.length - 1;
+              return _ExperienceTimelineEntry(
+                experience: exp,
+                index: i,
+                isLast: isLast,
+              );
+            }),
+          ] else ...[
+            ...List.generate(AppConstants.education.length, (i) {
+              final edu = AppConstants.education[i];
+              return _EducationCard(education: edu);
+            }),
+            const SizedBox(height: 32),
+            _LanguagesCard(),
+          ],
         ],
       ),
     );
   }
 }
 
-class _TimelineEntry extends StatefulWidget {
+class _TabButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const _TabButton({
+    required this.label,
+    required this.icon,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 11),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(9),
+            gradient: isActive ? AppColors.primaryGradient : null,
+            color: isActive ? null : Colors.transparent,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: isActive ? AppColors.bgDark : AppColors.textMuted,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                label,
+                style: GoogleFonts.inter(
+                  fontSize: 13.5,
+                  fontWeight: FontWeight.w700,
+                  color: isActive ? AppColors.bgDark : AppColors.textMuted,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ExperienceTimelineEntry extends StatefulWidget {
   final ExperienceModel experience;
   final int index;
   final bool isLast;
-  const _TimelineEntry({
+  const _ExperienceTimelineEntry({
     required this.experience,
     required this.index,
     required this.isLast,
   });
 
   @override
-  State<_TimelineEntry> createState() => _TimelineEntryState();
+  State<_ExperienceTimelineEntry> createState() =>
+      _ExperienceTimelineEntryState();
 }
 
-class _TimelineEntryState extends State<_TimelineEntry>
+class _ExperienceTimelineEntryState extends State<_ExperienceTimelineEntry>
     with SingleTickerProviderStateMixin {
   late AnimationController _ctrl;
   late Animation<double> _fadeAnim;
@@ -66,15 +168,14 @@ class _TimelineEntryState extends State<_TimelineEntry>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 700));
+        vsync: this, duration: const Duration(milliseconds: 700));
     _fadeAnim = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
     _slideAnim = Tween<Offset>(
       begin: Offset(widget.index.isEven ? -0.04 : 0.04, 0),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOut));
 
-    Future.delayed(Duration(milliseconds: 200 + widget.index * 150), () {
+    Future.delayed(Duration(milliseconds: 150 + widget.index * 120), () {
       if (mounted) _ctrl.forward();
     });
   }
@@ -99,7 +200,7 @@ class _TimelineEntryState extends State<_TimelineEntry>
             children: [
               // Timeline line + dot
               SizedBox(
-                width: 60,
+                width: 50,
                 child: Column(
                   children: [
                     const SizedBox(height: 24),
@@ -114,7 +215,7 @@ class _TimelineEntryState extends State<_TimelineEntry>
                             : const LinearGradient(
                                 colors: [
                                   AppColors.secondary,
-                                  AppColors.accent
+                                  AppColors.accent,
                                 ],
                               ),
                         boxShadow: [
@@ -149,7 +250,7 @@ class _TimelineEntryState extends State<_TimelineEntry>
                   ],
                 ),
               ),
-              const SizedBox(width: 20),
+              const SizedBox(width: 16),
               // Card
               Expanded(
                 child: Padding(
@@ -169,7 +270,7 @@ class _TimelineEntryState extends State<_TimelineEntry>
                                   Text(
                                     exp.role,
                                     style: GoogleFonts.spaceGrotesk(
-                                      fontSize: 18,
+                                      fontSize: 19,
                                       fontWeight: FontWeight.w700,
                                       color: AppColors.textWhite,
                                       letterSpacing: -0.3,
@@ -179,15 +280,18 @@ class _TimelineEntryState extends State<_TimelineEntry>
                                   Row(
                                     children: [
                                       const Icon(Icons.business_rounded,
-                                          size: 14,
-                                          color: AppColors.primary),
+                                          size: 15, color: AppColors.primary),
                                       const SizedBox(width: 6),
-                                      Text(
-                                        exp.company,
-                                        style: GoogleFonts.inter(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColors.primary,
+                                      Expanded(
+                                        child: Text(
+                                          '${exp.company} (${exp.location})',
+                                          style: GoogleFonts.inter(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.primary,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
@@ -195,6 +299,7 @@ class _TimelineEntryState extends State<_TimelineEntry>
                                 ],
                               ),
                             ),
+                            const SizedBox(width: 10),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 6),
@@ -242,12 +347,38 @@ class _TimelineEntryState extends State<_TimelineEntry>
                         Text(
                           exp.description,
                           style: GoogleFonts.inter(
-                            fontSize: 14.5,
+                            fontSize: 14,
                             color: AppColors.textMuted,
-                            height: 1.75,
+                            height: 1.7,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 16),
+                        // Bullet points
+                        ...exp.bulletPoints.map(
+                          (bp) => Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('• ',
+                                    style: TextStyle(
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.bold)),
+                                Expanded(
+                                  child: Text(
+                                    bp,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13.5,
+                                      color: AppColors.textLight,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 18),
                         // Tech chips
                         Wrap(
                           spacing: 8,
@@ -269,6 +400,154 @@ class _TimelineEntryState extends State<_TimelineEntry>
   }
 }
 
+class _EducationCard extends StatelessWidget {
+  final EducationModel education;
+  const _EducationCard({required this.education});
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  gradient: AppColors.cardGradient,
+                  border: Border.all(color: AppColors.borderGlass),
+                ),
+                child: const Icon(Icons.school_rounded,
+                    color: AppColors.secondary, size: 24),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      education.degree,
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textWhite,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${education.institution}  •  ${education.university}',
+                      style: GoogleFonts.inter(
+                        fontSize: 13.5,
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: AppColors.bgSurface,
+                  border: Border.all(color: AppColors.borderGlass),
+                ),
+                child: Text(
+                  education.period,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: AppColors.textMuted,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Text(
+            education.description,
+            style: GoogleFonts.inter(
+              fontSize: 14,
+              color: AppColors.textMuted,
+              height: 1.7,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LanguagesCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.translate_rounded,
+                  color: AppColors.accent, size: 22),
+              const SizedBox(width: 12),
+              Text(
+                'Languages Known',
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textWhite,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: AppConstants.languages
+                .map(
+                  (l) => Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.bgSurface,
+                      border: Border.all(color: AppColors.borderGlass),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          l['name']!,
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textWhite,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          l['level']!,
+                          style: GoogleFonts.inter(
+                            fontSize: 12,
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _ExpChip extends StatelessWidget {
   final String label;
   const _ExpChip({required this.label});
@@ -282,11 +561,14 @@ class _ExpChip extends StatelessWidget {
         color: AppColors.bgSurface,
         border: Border.all(color: AppColors.borderGlass),
       ),
-      child: Text(label,
-          style: GoogleFonts.inter(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: AppColors.textMuted)),
+      child: Text(
+        label,
+        style: GoogleFonts.inter(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: AppColors.textMuted,
+        ),
+      ),
     );
   }
 }

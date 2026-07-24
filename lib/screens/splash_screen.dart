@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/app_colors.dart';
+import '../core/app_constants.dart';
 import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -36,8 +37,7 @@ class _SplashScreenState extends State<SplashScreen>
         CurvedAnimation(parent: _logoCtrl, curve: Curves.elasticOut));
     _logoOpacity =
         CurvedAnimation(parent: _logoCtrl, curve: const Interval(0, 0.5));
-    _textOpacity =
-        CurvedAnimation(parent: _textCtrl, curve: Curves.easeOut);
+    _textOpacity = CurvedAnimation(parent: _textCtrl, curve: Curves.easeOut);
     _exitOpacity = Tween<double>(begin: 1.0, end: 0.0).animate(
         CurvedAnimation(parent: _exitCtrl, curve: Curves.easeIn));
 
@@ -45,18 +45,18 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _runSequence() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 250));
     await _logoCtrl.forward();
-    await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 150));
     await _textCtrl.forward();
-    await Future.delayed(const Duration(milliseconds: 1000));
+    await Future.delayed(const Duration(milliseconds: 900));
     await _exitCtrl.forward();
     if (mounted) {
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const HomeScreen(),
+          pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
           transitionDuration: const Duration(milliseconds: 600),
-          transitionsBuilder: (_, anim, __, child) =>
+          transitionsBuilder: (context, anim, secondaryAnimation, child) =>
               FadeTransition(opacity: anim, child: child),
         ),
       );
@@ -118,7 +118,7 @@ class _SplashScreenState extends State<SplashScreen>
                   // Animated logo
                   AnimatedBuilder(
                     animation: _logoCtrl,
-                    builder: (_, __) => FadeTransition(
+                    builder: (context, child) => FadeTransition(
                       opacity: _logoOpacity,
                       child: Transform.scale(
                         scale: _logoScale.value,
@@ -138,12 +138,12 @@ class _SplashScreenState extends State<SplashScreen>
                           ),
                           child: Center(
                             child: Text(
-                              'AC',
+                              'SK',
                               style: GoogleFonts.spaceGrotesk(
-                                fontSize: 40,
+                                fontSize: 38,
                                 fontWeight: FontWeight.w800,
                                 color: AppColors.bgDark,
-                                letterSpacing: -2,
+                                letterSpacing: -1,
                               ),
                             ),
                           ),
@@ -158,28 +158,28 @@ class _SplashScreenState extends State<SplashScreen>
                     child: Column(
                       children: [
                         Text(
-                          'Alex Carter',
+                          AppConstants.name,
                           style: GoogleFonts.spaceGrotesk(
-                            fontSize: 30,
+                            fontSize: 28,
                             fontWeight: FontWeight.w800,
                             color: AppColors.textWhite,
-                            letterSpacing: -1.2,
+                            letterSpacing: -1,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Flutter Developer',
+                          'FLUTTER DEVELOPER',
                           style: GoogleFonts.inter(
-                            fontSize: 14,
+                            fontSize: 13,
                             color: AppColors.primary,
-                            fontWeight: FontWeight.w500,
-                            letterSpacing: 2,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 3,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 60),
+                  const SizedBox(height: 50),
                   // Loading bar
                   FadeTransition(
                     opacity: _textOpacity,
@@ -209,7 +209,7 @@ class _LoadingBarState extends State<_LoadingBar>
   void initState() {
     super.initState();
     _ctrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1200))
+        vsync: this, duration: const Duration(milliseconds: 1000))
       ..forward();
     _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
   }
@@ -223,7 +223,7 @@ class _LoadingBarState extends State<_LoadingBar>
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: 180,
       height: 3,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(2),
@@ -231,7 +231,7 @@ class _LoadingBarState extends State<_LoadingBar>
       ),
       child: AnimatedBuilder(
         animation: _anim,
-        builder: (_, __) => FractionallySizedBox(
+        builder: (context, child) => FractionallySizedBox(
           alignment: Alignment.centerLeft,
           widthFactor: _anim.value,
           child: Container(

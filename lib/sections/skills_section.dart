@@ -6,17 +6,32 @@ import '../widgets/animated_progress_ring.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/section_title.dart';
 
-class SkillsSection extends StatelessWidget {
+class SkillsSection extends StatefulWidget {
   const SkillsSection({super.key});
+
+  @override
+  State<SkillsSection> createState() => _SkillsSectionState();
+}
+
+class _SkillsSectionState extends State<SkillsSection> {
+  String _selectedCategory = 'All';
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final isDesktop = w > 900;
 
+    final filteredSkills = _selectedCategory == 'All'
+        ? AppConstants.skills
+        : AppConstants.skills
+            .where((s) => s.category == _selectedCategory)
+            .toList();
+
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: isDesktop ? 80 : 24, vertical: 100),
+        horizontal: isDesktop ? 80 : 24,
+        vertical: 100,
+      ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -30,9 +45,9 @@ class SkillsSection extends StatelessWidget {
       child: Column(
         children: [
           const SectionTitle(
-            title: 'Skills',
+            title: 'Technical Skills',
             subtitle:
-                'Technologies I\'ve mastered and tools I use to bring ideas to life.',
+                'Frameworks, languages, state management, databases, and development tools I use.',
           ),
           GlassCard(
             child: Column(
@@ -42,34 +57,44 @@ class SkillsSection extends StatelessWidget {
                   spacing: 10,
                   runSpacing: 10,
                   alignment: WrapAlignment.center,
-                  children: [
-                    _CategoryChip(label: 'All', isActive: true),
-                  ],
+                  children: AppConstants.skillCategories
+                      .map(
+                        (cat) => _CategoryChip(
+                          label: cat,
+                          isActive: _selectedCategory == cat,
+                          onTap: () => setState(() => _selectedCategory = cat),
+                        ),
+                      )
+                      .toList(),
                 ),
                 const SizedBox(height: 40),
                 // Skills grid
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: isDesktop ? 6 : (w > 600 ? 4 : 3),
-                    crossAxisSpacing: 24,
-                    mainAxisSpacing: 32,
-                    childAspectRatio: 0.9,
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: GridView.builder(
+                    key: ValueKey(_selectedCategory),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isDesktop ? 6 : (w > 600 ? 4 : 3),
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 28,
+                      childAspectRatio: 0.85,
+                    ),
+                    itemCount: filteredSkills.length,
+                    itemBuilder: (ctx, i) {
+                      final skill = filteredSkills[i];
+                      final color = AppColors.skillColors[
+                          i % AppColors.skillColors.length];
+                      return AnimatedProgressRing(
+                        value: skill.level,
+                        label: skill.name,
+                        color: color,
+                        size: isDesktop ? 100 : 85,
+                        strokeWidth: 6.5,
+                      );
+                    },
                   ),
-                  itemCount: AppConstants.skills.length,
-                  itemBuilder: (ctx, i) {
-                    final skill = AppConstants.skills[i];
-                    final color = AppColors.skillColors[
-                        i % AppColors.skillColors.length];
-                    return AnimatedProgressRing(
-                      value: skill.level,
-                      label: skill.name,
-                      color: color,
-                      size: isDesktop ? 105 : 90,
-                      strokeWidth: 7,
-                    );
-                  },
                 ),
                 const SizedBox(height: 40),
                 const _SkillLegend(),
@@ -85,27 +110,47 @@ class SkillsSection extends StatelessWidget {
 class _CategoryChip extends StatelessWidget {
   final String label;
   final bool isActive;
-  const _CategoryChip({required this.label, this.isActive = false});
+  final VoidCallback onTap;
+  const _CategoryChip({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        gradient: isActive ? AppColors.primaryGradient : null,
-        color: isActive ? null : AppColors.bgCard,
-        border: Border.all(
-          color: isActive ? Colors.transparent : AppColors.borderGlass,
-        ),
-      ),
-      child: Text(
-        label,
-        style: GoogleFonts.inter(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: isActive ? AppColors.bgDark : AppColors.textMuted,
+    return GestureDetector(
+      onTap: onTap,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            gradient: isActive ? AppColors.primaryGradient : null,
+            color: isActive ? null : AppColors.bgCard,
+            border: Border.all(
+              color: isActive ? Colors.transparent : AppColors.borderGlass,
+            ),
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withOpacity(0.3),
+                      blurRadius: 16,
+                      spreadRadius: -2,
+                    )
+                  ]
+                : null,
+          ),
+          child: Text(
+            label,
+            style: GoogleFonts.inter(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: isActive ? AppColors.bgDark : AppColors.textMuted,
+            ),
+          ),
         ),
       ),
     );
@@ -122,26 +167,33 @@ class _SkillLegend extends StatelessWidget {
       ('Advanced (80–89%)', AppColors.secondary),
       ('Proficient (70–79%)', AppColors.accent),
     ];
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      spacing: 20,
+      runSpacing: 10,
+      alignment: WrapAlignment.center,
       children: levels
-          .expand((l) => [
-                Row(mainAxisSize: MainAxisSize.min, children: [
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: l.$2),
+          .map(
+            (l) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 10,
+                  height: 10,
+                  decoration:
+                      BoxDecoration(shape: BoxShape.circle, color: l.$2),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  l.$1,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    color: AppColors.textDim,
+                    fontWeight: FontWeight.w500,
                   ),
-                  const SizedBox(width: 6),
-                  Text(l.$1,
-                      style: GoogleFonts.inter(
-                          fontSize: 12,
-                          color: AppColors.textDim,
-                          fontWeight: FontWeight.w500)),
-                ]),
-                const SizedBox(width: 24),
-              ])
+                ),
+              ],
+            ),
+          )
           .toList(),
     );
   }
