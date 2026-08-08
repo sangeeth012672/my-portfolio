@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
               BoxShadow(
                 color: AppColors.primary.withOpacity(0.3),
                 blurRadius: 40,
-              )
+              ),
             ],
           ),
           child: Column(
@@ -81,8 +81,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(12),
                       gradient: AppColors.primaryGradient,
                     ),
-                    child: const Icon(Icons.description_rounded,
-                        color: AppColors.bgDark, size: 24),
+                    child: const Icon(
+                      Icons.description_rounded,
+                      color: AppColors.bgDark,
+                      size: 24,
+                    ),
                   ),
                   const SizedBox(width: 14),
                   Expanded(
@@ -109,8 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close_rounded,
-                        color: AppColors.textMuted),
+                    icon: const Icon(
+                      Icons.close_rounded,
+                      color: AppColors.textMuted,
+                    ),
                     onPressed: () => Navigator.pop(ctx),
                   ),
                 ],
@@ -126,65 +131,76 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       _CvSectionTitle('CONTACT DETAILS'),
                       _CvText(
-                          '📍 Thrissur, Kerala\n📧 sangeethks742@gmail.com\n📞 +91-95672 59782 | +91-97780 04059'),
+                        '📍 Thrissur, Kerala\n📧 sangeethks742@gmail.com\n📞 +91-95672 59782 | +91-97780 04059',
+                      ),
                       const SizedBox(height: 16),
                       _CvSectionTitle('SUMMARY'),
                       _CvText(AppConstants.bio),
                       const SizedBox(height: 16),
                       _CvSectionTitle('EXPERIENCE'),
-                      ...AppConstants.experiences.map((exp) => Padding(
-                            padding: const EdgeInsets.only(bottom: 14),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '• ${exp.role} — ${exp.company} (${exp.period})',
-                                  style: GoogleFonts.inter(
-                                    fontSize: 13.5,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.textLight,
-                                  ),
+                      ...AppConstants.experiences.map(
+                        (exp) => Padding(
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '• ${exp.role} — ${exp.company} (${exp.period})',
+                                style: GoogleFonts.inter(
+                                  fontSize: 13.5,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textLight,
                                 ),
-                                const SizedBox(height: 4),
-                                ...exp.bulletPoints.map(
-                                  (bp) => Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 14, bottom: 3),
-                                    child: Text(
-                                      '- $bp',
-                                      style: GoogleFonts.inter(
-                                        fontSize: 12.5,
-                                        color: AppColors.textMuted,
-                                      ),
+                              ),
+                              const SizedBox(height: 4),
+                              ...exp.bulletPoints.map(
+                                (bp) => Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 14,
+                                    bottom: 3,
+                                  ),
+                                  child: Text(
+                                    '- $bp',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 12.5,
+                                      color: AppColors.textMuted,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          )),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 12),
                       _CvSectionTitle('TECHNICAL SKILLS'),
                       _CvText(
-                          '• Languages: Dart, Java\n• Frameworks: Flutter\n• API Integration: REST APIs, HTTP, Dio\n• State Management: Provider, BLoC\n• Backend: Firebase, Python Django\n• Databases: Hive, SQLite, MySQL, SQL Server\n• Tools: Android Studio, VS Code, Git'),
+                        '• Languages: Dart, Java\n• Frameworks: Flutter\n• API Integration: REST APIs, HTTP, Dio\n• State Management: Provider, BLoC\n• Backend: Firebase, Python Django\n• Databases: Hive, SQLite, MySQL, SQL Server\n• Tools: Android Studio, VS Code, Git',
+                      ),
                       const SizedBox(height: 16),
                       _CvSectionTitle('PROJECTS'),
-                      ...AppConstants.projects.map((p) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Text(
-                              '• ${p.title} — ${p.subtitle}',
-                              style: GoogleFonts.inter(
-                                fontSize: 13,
-                                color: AppColors.textLight,
-                              ),
+                      ...AppConstants.projects.map(
+                        (p) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Text(
+                            '• ${p.title} — ${p.subtitle}',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: AppColors.textLight,
                             ),
-                          )),
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       _CvSectionTitle('EDUCATION'),
                       _CvText(
-                          'BCA, Chinmaya Mission College, Thrissur (Jul 2015 – Aug 2018) | Bharathiar University'),
+                        'BCA, Chinmaya Mission College, Thrissur (Jul 2015 – Aug 2018) | Bharathiar University',
+                      ),
                       const SizedBox(height: 16),
                       _CvSectionTitle('LANGUAGES'),
-                      _CvText('English (Fluent), Malayalam (Native), Tamil (Intermediate)'),
+                      _CvText(
+                        'English (Fluent), Malayalam (Native), Tamil (Intermediate)',
+                      ),
                     ],
                   ),
                 ),
@@ -194,7 +210,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   OutlinedButton.icon(
-                    onPressed: () => launchUrl(Uri.parse(AppConstants.whatsappUrl)),
+                    onPressed: () =>
+                        launchUrl(Uri.parse(AppConstants.whatsappUrl)),
                     icon: const Icon(Icons.chat_rounded, size: 16),
                     label: const Text('Contact Sangeeth'),
                   ),
@@ -204,7 +221,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
-                              'CV Summary copied & downloaded! Replace resumeUrl in AppConstants for direct PDF download.'),
+                            'CV Summary copied & downloaded! Replace resumeUrl in AppConstants for direct PDF download.',
+                          ),
                         ),
                       );
                     },
