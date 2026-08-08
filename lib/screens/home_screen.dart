@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Skills',
     'Projects',
     'Experience',
-    'Contact',
+    'Contacts',
   ];
 
   @override
