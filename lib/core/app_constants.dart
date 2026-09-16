@@ -85,26 +85,7 @@ class AppConstants {
 
   // === Projects (10 Real CV Projects) ===
   static final List<ProjectModel> projects = [
-    const ProjectModel(
-      title: 'Expense Manager App',
-      subtitle: 'Offline-First Financial Tracking & Budget Sync',
-      description:
-          'An offline-first expense management mobile app engineered with BLoC pattern for predictable state flow and SQLite for local data persistence, featuring budget analytics and optional REST API cloud sync.',
-      features: [
-        'Offline-first architecture powered by SQLite local database',
-        'BLoC state management pattern for reactive UI updates',
-        'Interactive spending analytics & category breakdown charts',
-        'Optional REST API sync for cloud backup',
-        'Custom budget goals and alert notifications',
-      ],
-      techStack: ['Flutter', 'BLoC', 'SQLite', 'REST API', 'Dart'],
-      category: 'Mobile Apps',
-      gradient: [Color(0xFF00E5FF), Color(0xFF0072FF)],
-      icon: Icons.account_balance_wallet_rounded,
-      githubUrl: 'https://github.com/',
-      liveUrl: '',
-      featured: true,
-    ),
+
     const ProjectModel(
       title: 'Learning Management System (LMS)',
       subtitle: 'Course Management & E-Learning Portal',
@@ -276,6 +257,25 @@ class AppConstants {
       githubUrl: 'https://github.com/',
       liveUrl: '',
       featured: false,
+    ),
+    const ProjectModel(
+      title: 'HRMS',
+      subtitle: 'Attendance, Performance & Complaint Management',
+      description:
+          'Developed a comprehensive Flutter-based HRMS application with secure authentication, attendance tracking, performance evaluation, and employee complaint management features.',
+      features: [
+        'Employee attendance tracking and logging',
+        'Performance evaluation metrics',
+        'Complaint management module',
+        'Secure user authentication',
+      ],
+      techStack: ['Flutter', 'Dart', 'REST API', 'Authentication'],
+      category: 'Mobile Apps',
+      gradient: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+      icon: Icons.badge_rounded,
+      githubUrl: 'https://github.com/',
+      liveUrl: '',
+      featured: true,
     ),
   ];
 
