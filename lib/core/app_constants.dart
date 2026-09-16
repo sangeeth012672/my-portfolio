@@ -26,7 +26,7 @@ class AppConstants {
   static const String location = 'Thrissur, Kerala, India';
   static const String githubUrl = 'https://github.com/';
   static const String linkedinUrl = 'https://linkedin.com/';
-  static const String resumeUrl = '#'; // Download trigger
+  static const String resumeUrl = 'https://drive.google.com/uc?export=download&id=1sRI8U6AhTO-3JIhWJ4-dHxE1tfgAh5XO'; // Download trigger
 
   // === Stats ===
   static const int yearsExperience = 2;

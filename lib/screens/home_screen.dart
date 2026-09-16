@@ -216,15 +216,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: const Text('Contact Sangeeth'),
                   ),
                   ElevatedButton.icon(
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.pop(ctx);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'CV Summary copied & downloaded! Replace resumeUrl in AppConstants for direct PDF download.',
-                          ),
-                        ),
-                      );
+                      final url = AppConstants.resumeUrl;
+                      if (url != '#' && url.isNotEmpty) {
+                        final uri = Uri.parse(url);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri);
+                        } else {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Could not launch resume URL.'),
+                              ),
+                            );
+                          }
+                        }
+                      } else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Please update AppConstants.resumeUrl with your actual CV link to enable download.',
+                              ),
+                            ),
+                          );
+                        }
+                      }
                     },
                     icon: const Icon(Icons.download_rounded, size: 16),
                     label: const Text('Close / Print CV'),
