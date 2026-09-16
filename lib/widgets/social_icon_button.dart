@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../core/app_colors.dart';
 
 class SocialIconButton extends StatefulWidget {
-  final IconData icon;
+  final dynamic icon;
   final String tooltip;
   final VoidCallback onTap;
   final Color? color;
@@ -92,11 +93,17 @@ class _SocialIconButtonState extends State<SocialIconButton>
                       ]
                     : null,
               ),
-              child: Icon(
-                widget.icon,
-                color: _hovered ? color : AppColors.textMuted,
-                size: widget.size,
-              ),
+              child: widget.icon is IconData
+                  ? Icon(
+                      widget.icon,
+                      color: _hovered ? color : AppColors.textMuted,
+                      size: widget.size,
+                    )
+                  : FaIcon(
+                      widget.icon,
+                      color: _hovered ? color : AppColors.textMuted,
+                      size: widget.size,
+                    ),
             ),
           ),
         ),

@@ -752,7 +752,7 @@ class _OutlineButtonState extends State<_OutlineButton> {
 
 class _GlassButton extends StatefulWidget {
   final String label;
-  final IconData icon;
+  final dynamic icon;
   final Color color;
   final VoidCallback onTap;
   const _GlassButton({
@@ -798,7 +798,9 @@ class _GlassButtonState extends State<_GlassButton> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              FaIcon(widget.icon, size: 16, color: widget.color),
+              widget.icon is IconData
+                  ? Icon(widget.icon, size: 16, color: widget.color)
+                  : FaIcon(widget.icon, size: 16, color: widget.color),
               const SizedBox(width: 8),
               Text(
                 widget.label,
