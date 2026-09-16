@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/app_colors.dart';
 import '../core/app_constants.dart';
+import '../core/responsive.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/section_title.dart';
 
@@ -46,12 +47,12 @@ class _ContactSectionState extends State<ContactSection> {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isDesktop = w > 900;
+    final isDesktopOrLaptop = Responsive.isDesktop(context) || Responsive.isLaptop(context);
+    final isMobile = Responsive.isMobile(context);
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 80 : 24,
+        horizontal: isDesktopOrLaptop ? 80 : 24,
         vertical: 100,
       ),
       child: Column(
@@ -61,65 +62,114 @@ class _ContactSectionState extends State<ContactSection> {
             subtitle:
                 'Let\'s connect! Open for Flutter developer opportunities, contract projects, and collaborations.',
           ),
-          isDesktop
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(flex: 5, child: _ContactInfoCard()),
-                    const SizedBox(width: 32),
-                    Expanded(
-                      flex: 6,
-                      child: _ContactForm(
-                        formKey: _formKey,
-                        nameCtrl: _nameCtrl,
-                        emailCtrl: _emailCtrl,
-                        msgCtrl: _msgCtrl,
-                        sending: _sending,
-                        sent: _sent,
-                        onSend: _handleSend,
-                      ),
-                    ),
-                  ],
-                )
-              : Column(
-                  children: [
-                    _ContactInfoCard(),
-                    const SizedBox(height: 28),
-                    _ContactForm(
-                      formKey: _formKey,
-                      nameCtrl: _nameCtrl,
-                      emailCtrl: _emailCtrl,
-                      msgCtrl: _msgCtrl,
-                      sending: _sending,
-                      sent: _sent,
-                      onSend: _handleSend,
-                    ),
-                  ],
+          Responsive(
+            mobile: Column(
+              children: [
+                _ContactInfoCard(),
+                const SizedBox(height: 28),
+                _ContactForm(
+                  formKey: _formKey,
+                  nameCtrl: _nameCtrl,
+                  emailCtrl: _emailCtrl,
+                  msgCtrl: _msgCtrl,
+                  sending: _sending,
+                  sent: _sent,
+                  onSend: _handleSend,
                 ),
+              ],
+            ),
+            tablet: Column(
+              children: [
+                _ContactInfoCard(),
+                const SizedBox(height: 28),
+                _ContactForm(
+                  formKey: _formKey,
+                  nameCtrl: _nameCtrl,
+                  emailCtrl: _emailCtrl,
+                  msgCtrl: _msgCtrl,
+                  sending: _sending,
+                  sent: _sent,
+                  onSend: _handleSend,
+                ),
+              ],
+            ),
+            laptop: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 5, child: _ContactInfoCard()),
+                const SizedBox(width: 32),
+                Expanded(
+                  flex: 6,
+                  child: _ContactForm(
+                    formKey: _formKey,
+                    nameCtrl: _nameCtrl,
+                    emailCtrl: _emailCtrl,
+                    msgCtrl: _msgCtrl,
+                    sending: _sending,
+                    sent: _sent,
+                    onSend: _handleSend,
+                  ),
+                ),
+              ],
+            ),
+            desktop: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 5, child: _ContactInfoCard()),
+                const SizedBox(width: 32),
+                Expanded(
+                  flex: 6,
+                  child: _ContactForm(
+                    formKey: _formKey,
+                    nameCtrl: _nameCtrl,
+                    emailCtrl: _emailCtrl,
+                    msgCtrl: _msgCtrl,
+                    sending: _sending,
+                    sent: _sent,
+                    onSend: _handleSend,
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 80),
           // Footer
           const Divider(color: AppColors.borderGlass, height: 1),
           const SizedBox(height: 32),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: isMobile ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.center,
             children: [
               Text(
                 '© 2026 ${AppConstants.name}. All rights reserved.',
                 style: GoogleFonts.inter(
-                  fontSize: 13,
+                  fontSize: isMobile ? 11 : 13,
                   color: AppColors.textDim,
                 ),
+                textAlign: isMobile ? TextAlign.center : TextAlign.start,
               ),
-              Text(
-                'Built with 💙 Flutter Web & Dart',
-                style: GoogleFonts.inter(
-                  fontSize: 13,
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w500,
+              if (!isMobile)
+                Text(
+                  'Built with 💙 Flutter Web & Dart',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
             ],
           ),
+          if (isMobile) ...[
+            const SizedBox(height: 12),
+            Text(
+              'Built with 💙 Flutter Web & Dart',
+              style: GoogleFonts.inter(
+                fontSize: 11,
+                color: AppColors.primary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/app_colors.dart';
 import '../core/app_constants.dart';
+import '../core/responsive.dart';
 import '../models/education_model.dart';
 import '../models/experience_model.dart';
 import '../widgets/glass_card.dart';
@@ -19,11 +20,11 @@ class _ExperienceSectionState extends State<ExperienceSection> {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
+    final isDesktopOrLaptop = Responsive.isDesktop(context) || Responsive.isLaptop(context);
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: w > 900 ? 80 : 24,
+        horizontal: isDesktopOrLaptop ? 80 : 24,
         vertical: 100,
       ),
       decoration: BoxDecoration(
@@ -48,8 +49,10 @@ class _ExperienceSectionState extends State<ExperienceSection> {
               color: AppColors.bgCard,
               border: Border.all(color: AppColors.borderGlass),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
               children: [
                 _TabButton(
                   label: 'Work Experience',
@@ -260,11 +263,8 @@ class _ExperienceTimelineEntryState extends State<_ExperienceTimelineEntry>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Header
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
+                        Responsive.isMobile(context)
+                            ? Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -276,7 +276,49 @@ class _ExperienceTimelineEntryState extends State<_ExperienceTimelineEntry>
                                       letterSpacing: -0.3,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: exp.isPresent
+                                          ? AppColors.primary.withOpacity(0.12)
+                                          : AppColors.bgSurface,
+                                      border: Border.all(
+                                        color: exp.isPresent
+                                            ? AppColors.primary.withOpacity(0.3)
+                                            : AppColors.borderGlass,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (exp.isPresent) ...[
+                                          Container(
+                                            width: 6,
+                                            height: 6,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00FF88),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                        ],
+                                        Text(
+                                          exp.period,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: exp.isPresent
+                                                ? AppColors.primary
+                                                : AppColors.textMuted,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
                                   Row(
                                     children: [
                                       const Icon(Icons.business_rounded,
@@ -290,59 +332,97 @@ class _ExperienceTimelineEntryState extends State<_ExperienceTimelineEntry>
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.primary,
                                           ),
-                                          maxLines: 1,
+                                          maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ],
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: exp.isPresent
-                                    ? AppColors.primary.withOpacity(0.12)
-                                    : AppColors.bgSurface,
-                                border: Border.all(
-                                  color: exp.isPresent
-                                      ? AppColors.primary.withOpacity(0.3)
-                                      : AppColors.borderGlass,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (exp.isPresent) ...[
-                                    Container(
-                                      width: 6,
-                                      height: 6,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xFF00FF88),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          exp.role,
+                                          style: GoogleFonts.spaceGrotesk(
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.textWhite,
+                                            letterSpacing: -0.3,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.business_rounded,
+                                                size: 15, color: AppColors.primary),
+                                            const SizedBox(width: 6),
+                                            Expanded(
+                                              child: Text(
+                                                '${exp.company} (${exp.location})',
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors.primary,
+                                                ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 6),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                      color: exp.isPresent
+                                          ? AppColors.primary.withOpacity(0.12)
+                                          : AppColors.bgSurface,
+                                      border: Border.all(
+                                        color: exp.isPresent
+                                            ? AppColors.primary.withOpacity(0.3)
+                                            : AppColors.borderGlass,
                                       ),
                                     ),
-                                    const SizedBox(width: 6),
-                                  ],
-                                  Text(
-                                    exp.period,
-                                    style: GoogleFonts.inter(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: exp.isPresent
-                                          ? AppColors.primary
-                                          : AppColors.textMuted,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (exp.isPresent) ...[
+                                          Container(
+                                            width: 6,
+                                            height: 6,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xFF00FF88),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                        ],
+                                        Text(
+                                          exp.period,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w600,
+                                            color: exp.isPresent
+                                                ? AppColors.primary
+                                                : AppColors.textMuted,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
                         const SizedBox(height: 16),
                         Text(
                           exp.description,
@@ -410,33 +490,55 @@ class _EducationCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  gradient: AppColors.cardGradient,
-                  border: Border.all(color: AppColors.borderGlass),
-                ),
-                child: const Icon(Icons.school_rounded,
-                    color: AppColors.secondary, size: 24),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
+          Responsive.isMobile(context)
+              ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      education.degree,
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.textWhite,
+                    Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            gradient: AppColors.cardGradient,
+                            border: Border.all(color: AppColors.borderGlass),
+                          ),
+                          child: const Icon(Icons.school_rounded,
+                              color: AppColors.secondary, size: 24),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Text(
+                            education.degree,
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textWhite,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.bgSurface,
+                        border: Border.all(color: AppColors.borderGlass),
+                      ),
+                      child: Text(
+                        education.period,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: AppColors.textMuted,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 12),
                     Text(
                       '${education.institution}  •  ${education.university}',
                       style: GoogleFonts.inter(
@@ -446,27 +548,64 @@ class _EducationCard extends StatelessWidget {
                       ),
                     ),
                   ],
+                )
+              : Row(
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        gradient: AppColors.cardGradient,
+                        border: Border.all(color: AppColors.borderGlass),
+                      ),
+                      child: const Icon(Icons.school_rounded,
+                          color: AppColors.secondary, size: 24),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            education.degree,
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.textWhite,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${education.institution}  •  ${education.university}',
+                            style: GoogleFonts.inter(
+                              fontSize: 13.5,
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: AppColors.bgSurface,
+                        border: Border.all(color: AppColors.borderGlass),
+                      ),
+                      child: Text(
+                        education.period,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: AppColors.textMuted,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: AppColors.bgSurface,
-                  border: Border.all(color: AppColors.borderGlass),
-                ),
-                child: Text(
-                  education.period,
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    color: AppColors.textMuted,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
           const SizedBox(height: 18),
           Text(
             education.description,

@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/app_colors.dart';
+import '../core/responsive.dart';
 
 class PortfolioNavBar extends StatefulWidget {
   final ScrollController scrollController;
@@ -66,8 +67,7 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isDesktop = w > 850;
+    final isDesktopOrLaptop = Responsive.isDesktop(context) || Responsive.isLaptop(context);
 
     return ClipRect(
       child: BackdropFilter(
@@ -85,7 +85,7 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: isDesktop ? 40 : 20, vertical: 14),
+                horizontal: isDesktopOrLaptop ? 40 : 20, vertical: 14),
             child: Row(
               children: [
                 // Logo / Name Initials
@@ -129,7 +129,7 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
                           child: Text(
                             'SANGEETH K SAMBASIVAN',
                             style: GoogleFonts.spaceGrotesk(
-                              fontSize: isDesktop ? 17 : 14,
+                              fontSize: isDesktopOrLaptop ? 17 : 14,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 1.2,
                             ),
@@ -140,7 +140,7 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
                   ),
                 ),
                 const Spacer(),
-                if (isDesktop) ...[
+                if (isDesktopOrLaptop) ...[
                   ...List.generate(
                     widget.sectionNames.length,
                     (i) => _NavItem(

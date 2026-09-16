@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/app_colors.dart';
 import '../core/app_constants.dart';
+import '../core/responsive.dart';
 import '../models/project_model.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/section_title.dart';
@@ -19,8 +20,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isDesktop = w > 900;
+    final isDesktopOrLaptop = Responsive.isDesktop(context) || Responsive.isLaptop(context);
 
     List<ProjectModel> filtered = _selectedCategory == 'All'
         ? AppConstants.projects
@@ -34,7 +34,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 80 : 24,
+        horizontal: isDesktopOrLaptop ? 80 : 24,
         vertical: 100,
       ),
       child: Column(
@@ -66,7 +66,16 @@ class _ProjectsSectionState extends State<ProjectsSection> {
           // Grid
           LayoutBuilder(
             builder: (ctx, constraints) {
-              final cols = isDesktop ? 3 : (w > 600 ? 2 : 1);
+              final cols = Responsive.isDesktop(context) || Responsive.isLaptop(context) 
+                  ? 3 
+                  : (Responsive.isTablet(context) ? 2 : 1);
+                  
+              final aspectRatio = Responsive.isDesktop(context) 
+                  ? 0.78 
+                  : (Responsive.isLaptop(context) 
+                      ? 0.8 
+                      : (Responsive.isTablet(context) ? 0.85 : 0.82));
+
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -74,7 +83,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                   crossAxisCount: cols,
                   crossAxisSpacing: 24,
                   mainAxisSpacing: 24,
-                  childAspectRatio: isDesktop ? 0.78 : 0.82,
+                  childAspectRatio: aspectRatio,
                 ),
                 itemCount: displayedProjects.length,
                 itemBuilder: (ctx, i) => _ProjectCard(

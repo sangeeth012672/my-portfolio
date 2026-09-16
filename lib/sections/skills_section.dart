@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../core/app_colors.dart';
 import '../core/app_constants.dart';
+import '../core/responsive.dart';
 import '../widgets/animated_progress_ring.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/section_title.dart';
@@ -18,8 +19,7 @@ class _SkillsSectionState extends State<SkillsSection> {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isDesktop = w > 900;
+    final isDesktopOrLaptop = Responsive.isDesktop(context) || Responsive.isLaptop(context);
 
     final filteredSkills = _selectedCategory == 'All'
         ? AppConstants.skills
@@ -29,7 +29,7 @@ class _SkillsSectionState extends State<SkillsSection> {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 80 : 24,
+        horizontal: isDesktopOrLaptop ? 80 : 24,
         vertical: 100,
       ),
       decoration: BoxDecoration(
@@ -71,29 +71,26 @@ class _SkillsSectionState extends State<SkillsSection> {
                 // Skills grid
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300),
-                  child: GridView.builder(
+                  child: Wrap(
                     key: ValueKey(_selectedCategory),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: isDesktop ? 6 : (w > 600 ? 4 : 3),
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 28,
-                      childAspectRatio: 0.85,
-                    ),
-                    itemCount: filteredSkills.length,
-                    itemBuilder: (ctx, i) {
+                    spacing: Responsive.isMobile(context) ? 16 : 24,
+                    runSpacing: Responsive.isMobile(context) ? 24 : 32,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: List.generate(filteredSkills.length, (i) {
                       final skill = filteredSkills[i];
-                      final color = AppColors.skillColors[
-                          i % AppColors.skillColors.length];
-                      return AnimatedProgressRing(
-                        value: skill.level,
-                        label: skill.name,
-                        color: color,
-                        size: isDesktop ? 100 : 85,
-                        strokeWidth: 6.5,
+                      final color = AppColors.skillColors[i % AppColors.skillColors.length];
+                      return SizedBox(
+                        width: isDesktopOrLaptop ? 130 : (Responsive.isTablet(context) ? 110 : 90),
+                        child: AnimatedProgressRing(
+                          value: skill.level,
+                          label: skill.name,
+                          color: color,
+                          size: isDesktopOrLaptop ? 100 : (Responsive.isTablet(context) ? 85 : 75),
+                          strokeWidth: 6.5,
+                        ),
                       );
-                    },
+                    }),
                   ),
                 ),
                 const SizedBox(height: 40),

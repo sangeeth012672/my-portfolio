@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/app_colors.dart';
 import '../core/app_constants.dart';
+import '../core/responsive.dart';
 import '../widgets/glass_card.dart';
 import '../widgets/section_title.dart';
 
@@ -13,12 +14,11 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isDesktop = w > 900;
+    final isDesktopOrLaptop = Responsive.isDesktop(context) || Responsive.isLaptop(context);
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: isDesktop ? 80 : 24,
+        horizontal: isDesktopOrLaptop ? 80 : 24,
         vertical: 100,
       ),
       child: Column(
@@ -28,24 +28,42 @@ class AboutSection extends StatelessWidget {
             subtitle:
                 'Flutter Developer specialized in cross-platform mobile solutions, Django REST API integration & state management.',
           ),
-          isDesktop
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                        flex: 6,
-                        child: _BioCard(onDownloadCv: onDownloadCv)),
-                    const SizedBox(width: 32),
-                    Expanded(flex: 5, child: _StatsGrid()),
-                  ],
-                )
-              : Column(
-                  children: [
-                    _BioCard(onDownloadCv: onDownloadCv),
-                    const SizedBox(height: 28),
-                    _StatsGrid(),
-                  ],
-                ),
+          Responsive(
+            mobile: Column(
+              children: [
+                _BioCard(onDownloadCv: onDownloadCv),
+                const SizedBox(height: 28),
+                _StatsGrid(),
+              ],
+            ),
+            tablet: Column(
+              children: [
+                _BioCard(onDownloadCv: onDownloadCv),
+                const SizedBox(height: 28),
+                _StatsGrid(),
+              ],
+            ),
+            laptop: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    flex: 6,
+                    child: _BioCard(onDownloadCv: onDownloadCv)),
+                const SizedBox(width: 32),
+                Expanded(flex: 5, child: _StatsGrid()),
+              ],
+            ),
+            desktop: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    flex: 6,
+                    child: _BioCard(onDownloadCv: onDownloadCv)),
+                const SizedBox(width: 32),
+                Expanded(flex: 5, child: _StatsGrid()),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -83,26 +101,28 @@ class _BioCard extends StatelessWidget {
                     color: AppColors.primary, size: 24),
               ),
               const SizedBox(width: 14),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Professional Summary',
-                    style: GoogleFonts.spaceGrotesk(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textWhite,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Professional Summary',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textWhite,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Flutter Developer | Thrissur, Kerala',
-                    style: GoogleFonts.inter(
-                      fontSize: 13,
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w500,
+                    Text(
+                      'Flutter Developer | Thrissur, Kerala',
+                      style: GoogleFonts.inter(
+                        fontSize: 13,
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -273,23 +293,22 @@ class _StatsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 1.15,
-      ),
-      itemCount: _stats.length,
-      itemBuilder: (ctx, i) => _StatCard(
-        value: _stats[i]['value'] as int,
-        suffix: _stats[i]['suffix'] as String,
-        label: _stats[i]['label'] as String,
-        icon: _stats[i]['icon'] as IconData,
-        color: _stats[i]['color'] as Color,
-      ),
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      alignment: WrapAlignment.center,
+      children: List.generate(_stats.length, (i) {
+        return SizedBox(
+          width: Responsive.isMobile(context) ? (MediaQuery.of(context).size.width - 80) / 2 : 160,
+          child: _StatCard(
+            value: _stats[i]['value'] as int,
+            suffix: _stats[i]['suffix'] as String,
+            label: _stats[i]['label'] as String,
+            icon: _stats[i]['icon'] as IconData,
+            color: _stats[i]['color'] as Color,
+          ),
+        );
+      }),
     );
   }
 }

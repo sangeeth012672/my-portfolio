@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../core/app_colors.dart';
 import '../core/app_constants.dart';
+import '../core/responsive.dart';
 import '../widgets/gradient_text.dart';
 import '../widgets/particle_background.dart';
 import '../widgets/social_icon_button.dart';
@@ -56,9 +57,6 @@ class _HeroSectionState extends State<HeroSection>
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isDesktop = w > 900;
-
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height),
       child: ParticleBackground(
@@ -85,20 +83,26 @@ class _HeroSectionState extends State<HeroSection>
                     position: _slideAnim,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isDesktop ? 80 : 24,
+                        horizontal: Responsive.isDesktop(context) || Responsive.isLaptop(context) ? 80 : 24,
                         vertical: 100,
                       ),
-                      child: isDesktop
-                          ? _DesktopHeroLayout(
-                              onExploreWork: widget.onExploreWork,
-                              onDownloadCv: widget.onDownloadCv,
-                              onContactMe: widget.onContactMe,
-                            )
-                          : _MobileHeroLayout(
-                              onExploreWork: widget.onExploreWork,
-                              onDownloadCv: widget.onDownloadCv,
-                              onContactMe: widget.onContactMe,
-                            ),
+                      child: Responsive(
+                        mobile: _MobileHeroLayout(
+                          onExploreWork: widget.onExploreWork,
+                          onDownloadCv: widget.onDownloadCv,
+                          onContactMe: widget.onContactMe,
+                        ),
+                        tablet: _MobileHeroLayout(
+                          onExploreWork: widget.onExploreWork,
+                          onDownloadCv: widget.onDownloadCv,
+                          onContactMe: widget.onContactMe,
+                        ),
+                        desktop: _DesktopHeroLayout(
+                          onExploreWork: widget.onExploreWork,
+                          onDownloadCv: widget.onDownloadCv,
+                          onContactMe: widget.onContactMe,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -197,19 +201,20 @@ class _HeroTextContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
-    final isMobile = w <= 600;
+    final isMobile = Responsive.isMobile(context);
+    final isTablet = Responsive.isTablet(context);
+    final centerAlign = isMobile || isTablet;
 
     return Column(
       crossAxisAlignment:
-          isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+          centerAlign ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         // Availability & Location status badge
         Wrap(
           spacing: 10,
           runSpacing: 10,
-          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -279,7 +284,7 @@ class _HeroTextContent extends StatelessWidget {
         GradientText(
           AppConstants.name,
           style: GoogleFonts.plusJakartaSans(
-            fontSize: isMobile ? 34 : 50,
+            fontSize: isMobile ? 34 : (isTablet ? 42 : 50),
             fontWeight: FontWeight.w800,
             letterSpacing: -0.5,
             height: 1.25,
@@ -289,13 +294,13 @@ class _HeroTextContent extends StatelessWidget {
         const SizedBox(height: 14),
         // Animated role
         Wrap(
-          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Text(
               'I build ',
               style: GoogleFonts.spaceGrotesk(
-                fontSize: isMobile ? 20 : 26,
+                fontSize: isMobile ? 20 : (isTablet ? 24 : 26),
                 fontWeight: FontWeight.w600,
                 color: AppColors.textLight,
                 letterSpacing: -0.5,
@@ -303,7 +308,7 @@ class _HeroTextContent extends StatelessWidget {
             ),
             DefaultTextStyle(
               style: GoogleFonts.spaceGrotesk(
-                fontSize: isMobile ? 20 : 26,
+                fontSize: isMobile ? 20 : (isTablet ? 24 : 26),
                 fontWeight: FontWeight.w700,
                 color: AppColors.primary,
                 letterSpacing: -0.5,
@@ -325,7 +330,7 @@ class _HeroTextContent extends StatelessWidget {
         // Tagline
         Text(
           AppConstants.tagline,
-          textAlign: isMobile ? TextAlign.center : TextAlign.start,
+          textAlign: centerAlign ? TextAlign.center : TextAlign.start,
           style: GoogleFonts.inter(
             fontSize: 15.5,
             color: AppColors.textMuted,
@@ -337,7 +342,7 @@ class _HeroTextContent extends StatelessWidget {
         Wrap(
           spacing: 14,
           runSpacing: 14,
-          alignment: isMobile ? WrapAlignment.center : WrapAlignment.start,
+          alignment: centerAlign ? WrapAlignment.center : WrapAlignment.start,
           children: [
             _PrimaryButton(
               label: 'Explore Work',
@@ -361,7 +366,7 @@ class _HeroTextContent extends StatelessWidget {
         // Social links bar
         Row(
           mainAxisAlignment:
-              isMobile ? MainAxisAlignment.center : MainAxisAlignment.start,
+              centerAlign ? MainAxisAlignment.center : MainAxisAlignment.start,
           children: [
             Text(
               'Connect:',
